@@ -73,3 +73,20 @@ func UpdateGrocery(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, grocery)
 }
+
+func DeleteGrocery(c *gin.Context) {
+
+	var grocery model.Grocery
+
+	if err := model.DB.Where("id = ?", c.Param("id")).First(&grocery).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Grocery not found!"})
+		return
+	}
+
+	if err := model.DB.Delete(&grocery).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"message": "Grocery deleted"})
+
+}
