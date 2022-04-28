@@ -26,3 +26,28 @@ func GetGroceries(c *gin.Context) {
 		return
 	}
 }
+
+func GetGrocery(c *gin.Context) {
+	var grocery model.Grocery
+
+	if err := model.DB.Where("id=?", c.Param("id")).First(&grocery).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+		return
+	}
+}
+
+func PostGrocery(c *gin.Context) {
+
+	var grocery NewGrocery
+
+	if err := c.ShouldBindJSON(&grocery); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	newGrocery := model.Grocery{Name: grocery.Name, Quantity: grocery.Quantity}
+	if err := model.DB.Create(&newGrocery).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+}
