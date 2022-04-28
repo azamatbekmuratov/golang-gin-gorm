@@ -51,3 +51,25 @@ func PostGrocery(c *gin.Context) {
 		return
 	}
 }
+
+func UpdateGrocery(c *gin.Context) {
+	var grocery model.Grocery
+
+	if err := model.DB.Where("id=?", c.Param("id")).First(&grocery).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Grocery not found"})
+		return
+	}
+
+	var updateGrocery GroceryUpdate
+
+	if err := c.ShouldBindJSON(&updateGrocery); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	if err := model.DB.Model(&grocery).Updates(model.Grocery{Name: updateGrocery.Name, Quantity: updateGrocery.Quantity}).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, grocery)
+}
