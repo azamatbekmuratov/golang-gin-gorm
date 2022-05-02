@@ -11,7 +11,7 @@ var DB *gorm.DB
 
 func Database() {
 	_db, err := gorm.Open(postgres.New(postgres.Config{
-		DSN:                  "user=postgres password=postgres dbname=gin port=5432 sslmode=disable TimeZone=Asia/Almaty",
+		DSN:                  "host=localhost user=postgres password=postgres dbname=gin port=5432 sslmode=disable TimeZone=Asia/Almaty",
 		PreferSimpleProtocol: true, // disables implicit prepared statement usage
 	}), &gorm.Config{})
 
