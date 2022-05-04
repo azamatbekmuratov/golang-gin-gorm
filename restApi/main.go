@@ -6,10 +6,11 @@ import (
 	"log"
 
 	"github.com/gin-gonic/gin"
+	"github.com/rs/zerolog"
 )
 
 func main() {
-
+	zerolog.TimeFieldFormat = zerolog.TimeFormatUnix
 	model.Database()
 
 	router := gin.Default()
@@ -20,5 +21,5 @@ func main() {
 	router.PUT("/grocery/:id", grocery.UpdateGrocery)
 	router.DELETE("/grocery/:id", grocery.DeleteGrocery)
 
-	log.Fatal(router.Run(":10000"))
+	log.Fatal(router.Run(":10001"))
 }

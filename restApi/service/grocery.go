@@ -1,10 +1,12 @@
 package grocery
 
 import (
+	"errors"
 	"gin-gorm/restApi/model"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/rs/zerolog/log"
 )
 
 type NewGrocery struct {
@@ -18,7 +20,6 @@ type GroceryUpdate struct {
 }
 
 func GetGroceries(c *gin.Context) {
-
 	var groceries []model.Grocery
 
 	if err := model.DB.Find(&groceries).Error; err != nil {
@@ -49,6 +50,8 @@ func PostGrocery(c *gin.Context) {
 	if err := model.DB.Create(&newGrocery).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
+	} else {
+		log.Error().Err(errors.New("error in post grocery")).Msg("")
 	}
 }
 
