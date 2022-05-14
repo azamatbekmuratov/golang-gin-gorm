@@ -2,6 +2,7 @@ package grocery
 
 import (
 	"errors"
+	appLog "gin-gorm/restApi/log"
 	"gin-gorm/restApi/model"
 	"net/http"
 
@@ -21,6 +22,7 @@ type GroceryUpdate struct {
 
 func GetGroceries(c *gin.Context) {
 	var groceries []model.Grocery
+	appLog.AppLog.Info("App log test")
 
 	if err := model.DB.Find(&groceries).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})

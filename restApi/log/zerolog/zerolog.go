@@ -26,6 +26,7 @@ func NewLogger(serviceName string) *Zerolog {
 
 	zerolog.CallerMarshalFunc = customMarshalFunc()
 	zerolog.CallerSkipFrameCount = 3
+	zerolog.TimeFieldFormat = zerolog.TimeFormatUnix
 
 	return &Zerolog{
 		log:         log,
@@ -36,6 +37,18 @@ func NewLogger(serviceName string) *Zerolog {
 
 func (z *Zerolog) Info(msg string) {
 	z.log.Info().Str(serviceName, z.serviceName).Msg(msg)
+}
+
+func (z *Zerolog) Error(msg string, err error) {
+	z.log.Error().Err(err).Str(serviceName, z.serviceName).Msg(msg)
+}
+
+func (z *Zerolog) Debug(msg string) {
+	z.log.Debug().Str(serviceName, z.serviceName).Msg(msg)
+}
+
+func (z *Zerolog) Warn(msg string) {
+	z.log.Warn().Str(serviceName, z.serviceName).Msg(msg)
 }
 
 func customConsole() zerolog.ConsoleWriter {

@@ -1,19 +1,28 @@
 package main
 
 import (
+	"fmt"
+	appLog "gin-gorm/restApi/log"
 	"gin-gorm/restApi/model"
 	grocery "gin-gorm/restApi/service"
 	"log"
 
+	zerolog "gin-gorm/restApi/log/zerolog"
+
 	"github.com/gin-gonic/gin"
-	"github.com/rs/zerolog"
 )
 
+func initLogger() appLog.AppLogger {
+	appLog.AppLog = zerolog.NewLogger("Gin-gormApp")
+
+	return appLog.AppLog
+}
+
 func main() {
-	zerolog.TimeFieldFormat = zerolog.TimeFormatUnix
 	model.Database()
 
 	router := gin.Default()
+	initLogger()
 
 	router.GET("/groceries", grocery.GetGroceries)
 	router.GET("/grocery/:id", grocery.GetGrocery)
@@ -21,5 +30,6 @@ func main() {
 	router.PUT("/grocery/:id", grocery.UpdateGrocery)
 	router.DELETE("/grocery/:id", grocery.DeleteGrocery)
 
-	log.Fatal(router.Run(":10001"))
+	log.Fatal(router.Run(":10002"))
+	fmt.Printf("heello")
 }

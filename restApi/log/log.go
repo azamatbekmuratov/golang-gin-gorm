@@ -1,6 +1,8 @@
 package log
 
-var AppLogger interface {
+var AppLog AppLogger
+
+type AppLogger interface {
 	Info(msg string)
 	Error(msg string, err error)
 	Debug(msg string)
